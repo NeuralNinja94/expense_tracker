@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.validation.constraints.Size;
+
 
 
 
@@ -24,7 +26,7 @@ public class User {
     @NotBlank
     private String benutzername;
     @NotBlank
-    @Min(8)
+    @Size(min = 8)
     private String passwort;
     private LocalDate erstellungsdatum;
 
