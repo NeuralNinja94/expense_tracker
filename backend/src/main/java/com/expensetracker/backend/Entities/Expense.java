@@ -1,15 +1,24 @@
-package com.expensetracker.backend.Entities;
+package com.expensetracker.backend.entities;
+
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
-@Data
+
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +27,7 @@ public class Expense {
     private Double betrag;
     private String kategorie;
     private LocalDate datum;
+    
     @ManyToOne
     private User user;
 
