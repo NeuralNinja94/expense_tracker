@@ -35,7 +35,6 @@ public class Expense {
     private String kategorie;
     @NotNull
     private LocalDate datum;
-    
     @ManyToOne
     private User user;
 

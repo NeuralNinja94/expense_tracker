@@ -17,6 +17,7 @@ public interface ExpenseSheetRepository extends JpaRepository<ExpenseSheet, Long
 
     //Zeigt das aktuellste Sheet eines Users an
     List<ExpenseSheet> findByUserIdOrderByMonatDesc(Long userId);
+    
     //Prüft ob ein Sheet für bestimmten Monat + User existiert
     boolean existsByMonatAndUserId(LocalDate monat, Long userId);
 
