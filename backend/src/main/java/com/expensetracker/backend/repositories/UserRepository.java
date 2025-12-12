@@ -9,7 +9,7 @@ import com.expensetracker.backend.entities.User;
 
 
 public interface UserRepository extends JpaRepository<User, Long>  {
-    
+
 
 
 }
