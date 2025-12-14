@@ -47,10 +47,10 @@ public class UserController {
         userService.deleteUser(id);
     }
     //Aktualisieren eines Benutzers
-    @PatchMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user);
-    }
+    //@PatchMapping("/{id}")
+    //public User updateUser(@PathVariable Long id, @RequestBody User user) {
+        //return userService.updateUser(id, user);
+    //}
     
 
     

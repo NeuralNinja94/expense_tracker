@@ -12,17 +12,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 @Entity
-@Getter 
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 
 public class ExpenseSheet {
 @Id
@@ -41,6 +33,41 @@ private User user;
 @OneToMany
 private List<Expense> expenses;
 
+// Getter und Setter
+public Long getId() {
+    return id;
+}
 
-    
+public void setId(Long id) {
+    this.id = id;
+}
+
+public double getBudget() {
+    return budget;
+}
+
+public void setBudget(double budget) {
+    this.budget = budget;
+}
+public LocalDate getMonat() {
+    return monat;
+}
+
+public void setMonat(LocalDate monat) {
+    this.monat = monat;
+}
+
+public User getUser() {
+    return user;
+}
+public void setUser(User user) {
+    this.user = user;
+}
+
+public List<Expense> getExpenses() {
+    return expenses;
+}
+public void setExpenses(List<Expense> expenses) {
+    this.expenses = expenses;
+}
 }

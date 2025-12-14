@@ -10,18 +10,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +30,37 @@ public class Expense {
     
     @ManyToOne
     private User user;
+
+    // Getter und Setter
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitel() {
+        return titel;
+    }
+    public void setTitel(String titel) {
+        this.titel = titel;
+    }
+    public Double getBetrag() {
+        return betrag;
+    }
+    public void setBetrag(Double betrag) {
+        this.betrag = betrag;
+    }
+    public String getKategorie() {
+        return kategorie;
+    }
+    public void setKategorie(String kategorie) {
+        this.kategorie = kategorie;
+    }
+    public LocalDate getDatum() {
+        return datum;
+    }
 
     
 }

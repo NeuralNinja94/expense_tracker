@@ -11,6 +11,7 @@ import com.expensetracker.backend.repositories.UserRepository;
 
 
 
+
 @Service
 public class UserService {
 
@@ -36,20 +37,7 @@ public class UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
-    //Benutzer aktualisieren
-    public User updateUser(Long id, User user) {
-        User existingUser = userRepository.findById(id).orElse(null);
-        if (existingUser != null) {
-            existingUser.setBenutzername(user.getBenutzername());
-            existingUser.setPasswort(user.getPasswort());
-            // Weitere Felder können hier aktualisiert werden
-            return userRepository.save(existingUser);
-        }
-        return null;
-    }
-    
-
-    
+    //Anmeldeinformationen validieren
     public void validateCredentials(String benutzername, String passwort){
         // Validierung der Anmeldeinformationen
         if (benutzername == null || benutzername.isBlank()) {
@@ -58,15 +46,21 @@ public class UserService {
         if (passwort == null || passwort.isBlank()) {
             throw new IllegalArgumentException("Bitte Passwort eingeben");
         }
-
-        User user = userRepository.findByBenutzername(benutzername)
-                .orElseThrow(IllegalArgumentException::new);
-
-        if (!user.getPasswort().equals(passwort)) {
-            throw new IllegalArgumentException("Ungültiges Passwort");
-        }
-        
     }
+    
+    //Benutzer aktualisieren
+    public User updateUser(Long id, User updatedUser) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Benutzer nicht gefunden mit der ID: " + id));
+
+        existingUser.setBenutzername(updatedUser.getBenutzername());
+        existingUser.setPasswort(updatedUser.getPasswort());
+        // Weitere Felder können hier aktualisiert werden
+
+        return userRepository.save(existingUser);
+    }
+
+
     
 
 }
