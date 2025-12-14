@@ -25,6 +25,7 @@ public class Expense {
     private Double betrag;
     @NotBlank
     private String kategorie;
+    //Ausgabendatum
     @NotNull
     private LocalDate datum;
     
@@ -60,6 +61,9 @@ public class Expense {
     }
     public LocalDate getDatum() {
         return datum;
+    }
+    public void setDatum(LocalDate datum) {
+        this.datum = datum;
     }
 
     

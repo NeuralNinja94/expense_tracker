@@ -27,7 +27,8 @@ public class UserService {
     }
     //Benutzer nach ID abrufen
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Benutzer nicht gefunden mit der ID: " + id));
     }
     //Neuen Benutzer erstellen
     public User createUser(User user) {
@@ -55,11 +56,12 @@ public class UserService {
 
         existingUser.setBenutzername(updatedUser.getBenutzername());
         existingUser.setPasswort(updatedUser.getPasswort());
-        // Weitere Felder können hier aktualisiert werden
+        
 
         return userRepository.save(existingUser);
     }
 
+    
 
     
 
