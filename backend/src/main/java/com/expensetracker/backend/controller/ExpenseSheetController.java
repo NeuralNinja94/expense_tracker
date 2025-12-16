@@ -2,6 +2,8 @@ package com.expensetracker.backend.controller;
 
 import java.util.List;
 
+import org.springframework.lang.NonNull;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +18,7 @@ import com.expensetracker.backend.entities.ExpenseSheet;
 import com.expensetracker.backend.services.ExpenseSheetService;
 
 @RestController
+@Validated
 @RequestMapping("/api/expense-sheets")
 public class ExpenseSheetController {
 
@@ -31,32 +34,32 @@ public class ExpenseSheetController {
     }
     //Abrufen eines Ausgabenblatts nach ID
     @GetMapping("/{sheetId}")
-    public ExpenseSheet getExpenseSheetByUserId(@PathVariable Long sheetId) {
+    public ExpenseSheet getExpenseSheetByUserId(@PathVariable @NonNull Long sheetId) {
         return expenseSheetService.getExpenseSheetById(sheetId);
     }
     //Erstellen eines neuen Ausgabenblatts
     @PostMapping
-    public ExpenseSheet createExpenseSheet(@RequestBody ExpenseSheet expenseSheet) {
+    public ExpenseSheet createExpenseSheet(@RequestBody @Validated @NonNull ExpenseSheet expenseSheet) {
         return expenseSheetService.createExpenseSheet(expenseSheet);
     }
     //Aktualisieren eines Ausgabenblatts
     @PutMapping("/{sheetId}")
-    public ExpenseSheet updateExpenseSheet(@PathVariable Long sheetId, @RequestBody ExpenseSheet expenseSheet) {
+    public ExpenseSheet updateExpenseSheet(@PathVariable @NonNull Long sheetId, @RequestBody @Validated @NonNull ExpenseSheet expenseSheet) {
         return expenseSheetService.updateExpenseSheet(sheetId, expenseSheet);
     }
     //Löschen eines Ausgabenblatts
     @DeleteMapping("/{sheetId}")
-    public void deleteExpenseSheet(@PathVariable Long sheetId) {
+    public void deleteExpenseSheet(@PathVariable @NonNull Long sheetId) {
         expenseSheetService.deleteExpenseSheet(sheetId);
     }
     //Wieviel wurde ausgegeben in diesem Ausgabenblatt
     @GetMapping("/{sheetId}/total-expenses")   
-    public double getTotalExpenses(@PathVariable Long sheetId) {
+    public double getTotalExpenses(@PathVariable @NonNull Long sheetId) {
         return expenseSheetService.getTotalExpenses(sheetId);
     }
     //Überprüfen ob Budget überschritten wurde
     @GetMapping("/{sheetId}/is-budget-exceeded")
-    public boolean isBudgetExceeded(@PathVariable Long sheetId) {
+    public boolean isBudgetExceeded(@PathVariable @NonNull Long sheetId) {
         return expenseSheetService.isBudgetExceeded(sheetId);
     }
     

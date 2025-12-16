@@ -1,11 +1,11 @@
 package com.expensetracker.backend.services;
 import java.util.List;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.expensetracker.backend.entities.ExpenseSheet;
 import com.expensetracker.backend.repositories.ExpenseSheetRepository;
-import com.expensetracker.backend.entities.Expense;
 
 
 
@@ -17,11 +17,11 @@ public class ExpenseSheetService {
         this.expenseSheetRepository = expenseSheetRepository;
     }
     // Methode zum Löschen eines Ausgabenblatts
-    public void deleteExpenseSheet(Long sheetId) {
+    public void deleteExpenseSheet(@NonNull Long sheetId) {
         expenseSheetRepository.deleteById(sheetId);
     }
     //Methode zum Aktualisieren eines Ausgabenblatts
-    public ExpenseSheet updateExpenseSheet(Long sheetId, ExpenseSheet updatedExpenseSheet) {
+    public ExpenseSheet updateExpenseSheet(@NonNull Long sheetId, @NonNull ExpenseSheet updatedExpenseSheet) {
         ExpenseSheet existingExpenseSheet = expenseSheetRepository.findById(sheetId)
                 .orElseThrow(() -> new IllegalArgumentException("Ausgabenblatt nicht gefunden mit der ID: " + sheetId));
 
@@ -30,19 +30,25 @@ public class ExpenseSheetService {
 
         return expenseSheetRepository.save(existingExpenseSheet);
     }
+    //Methode zum Abrufen eines Ausgabenblatts nach ID
+    public ExpenseSheet getExpenseSheetById(@NonNull Long sheetId) {
+        return expenseSheetRepository.findById(sheetId)
+                .orElseThrow(() -> new IllegalArgumentException("Ausgabenblatt nicht gefunden mit der ID: " + sheetId));
+    }
     
     
-
-    
-   
+    //Methode zum Abrufen aller Ausgabenblätter mit optionalen Filtern
+    public List<ExpenseSheet> getAllExpenseSheets(Long userId, Integer year, Integer month, String title, Double budget) {
+        return expenseSheetRepository.findAll();
+    }
 
     //Neuerstellung eines Ausgabenblatts
-    public ExpenseSheet createExpenseSheet(ExpenseSheet expenseSheet) {
+    public ExpenseSheet createExpenseSheet(@NonNull ExpenseSheet expenseSheet) {
         return expenseSheetRepository.save(expenseSheet);
     }
 
     //Methode zur Berechnung der Gesamtausgaben in einem Ausgabenblatt
-    public double getTotalExpenses(Long sheetId) {
+    public double getTotalExpenses(@NonNull Long sheetId) {
         ExpenseSheet expenseSheet = expenseSheetRepository.findById(sheetId)
                 .orElseThrow(() -> new IllegalArgumentException("Ausgabenblatt nicht gefunden mit der ID: " + sheetId));
 
@@ -52,7 +58,7 @@ public class ExpenseSheetService {
                 .sum();
     }
     //Methode zur Überprüfung, ob das Budget überschritten wurde
-    public boolean isBudgetExceeded(Long sheetId) {
+    public boolean isBudgetExceeded(@NonNull Long sheetId) {
         ExpenseSheet expenseSheet = expenseSheetRepository.findById(sheetId)
                 .orElseThrow(() -> new IllegalArgumentException("Ausgabenblatt nicht gefunden mit der ID: " + sheetId));
 

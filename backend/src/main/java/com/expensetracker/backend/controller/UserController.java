@@ -2,6 +2,8 @@ package com.expensetracker.backend.controller;
 
 import java.util.List;
 
+import org.springframework.lang.NonNull;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,6 +17,7 @@ import com.expensetracker.backend.entities.User;
 import com.expensetracker.backend.services.UserService;
 
 @RestController
+@Validated
 @RequestMapping("/api/users")
 public class UserController {
 
@@ -31,22 +34,22 @@ public class UserController {
     }
     //Abrufen eines Benutzers nach ID
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
+    public User getUserById(@PathVariable @NonNull Long id) {
         return userService.getUserById(id);
     }
     //Erstellen eines neuen Benutzers
     @PostMapping
-    public User createUser(@RequestBody User user) {
+    public User createUser(@RequestBody @Validated @NonNull User user) {
         return userService.createUser(user);
     }
     //Löschen eines Benutzers
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable @NonNull Long id) {
         userService.deleteUser(id);
     }
     //Aktualisieren eines Benutzers
     @PatchMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
+    public User updateUser(@PathVariable @NonNull Long id, @RequestBody @Validated @NonNull User user) {
         return userService.updateUser(id, user);
     }
     
