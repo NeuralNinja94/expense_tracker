@@ -1,10 +1,13 @@
 package com.expensetracker.backend.services;
+
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.expensetracker.backend.entities.Expense;
+import com.expensetracker.backend.entities.User;
 import com.expensetracker.backend.exception.ResourceNotFoundException;
 import com.expensetracker.backend.repositories.ExpenseRepository;
+import com.expensetracker.backend.repositories.UserRepository;
 
 
 
@@ -14,8 +17,11 @@ import com.expensetracker.backend.repositories.ExpenseRepository;
 @Service
 public class ExpenseService {
     private final ExpenseRepository expenseRepository;
-    public ExpenseService(ExpenseRepository expenseRepository) {
+    private final UserRepository userRepository;
+    
+    public ExpenseService(ExpenseRepository expenseRepository, UserRepository userRepository) {
         this.expenseRepository = expenseRepository;
+        this.userRepository = userRepository;
     }
 
     //Methode zum Abrufen aller Ausgaben
@@ -24,31 +30,46 @@ public class ExpenseService {
     }
 
     // Methode zum Erstellen einer Ausgabe
-    public Expense createExpense(@NonNull Expense expense) {
+    @SuppressWarnings("null")
+    public Expense createExpense(Expense expense) {
+        // Setze den User, falls nur die ID vorhanden ist
+        if (expense.getUser() != null && expense.getUser().getId() != null) {
+            Long userId = expense.getUser().getId();
+            User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                    "Benutzer nicht gefunden mit der ID: " + userId));
+            expense.setUser(user);
+        }
         return expenseRepository.save(expense);
     }
 
     // Methode zum Aktualisieren einer Expense
-public Expense updateExpense(@NonNull Long expenseId, @NonNull Expense updatedExpense) {
+    @SuppressWarnings("null")
+    public Expense updateExpense(@NonNull Long expenseId, Expense updatedExpense) {
+        // Bestehende Expense laden oder Fehler werfen
+        Expense existingExpense = expenseRepository.findById(expenseId)
+            .orElseThrow(() ->
+                new ResourceNotFoundException("Expense not found with id: " + expenseId)
+            );
 
-    // 1. Bestehende Expense laden oder Fehler werfen
-    Expense existingExpense = expenseRepository.findById(expenseId)
-        .orElseThrow(() ->
-            new ResourceNotFoundException("Expense not found with id: " + expenseId)
-        );
+        // Aktualisiere die Felder
+        existingExpense.setTitel(updatedExpense.getTitel());
+        existingExpense.setBetrag(updatedExpense.getBetrag());
+        existingExpense.setKategorie(updatedExpense.getKategorie());
+        existingExpense.setDatum(updatedExpense.getDatum());
 
-    
-    existingExpense.setTitel(updatedExpense.getTitel());
-    existingExpense.setBetrag(updatedExpense.getBetrag());
-    existingExpense.setKategorie(updatedExpense.getKategorie());
-    existingExpense.setDatum(updatedExpense.getDatum());
+        // Aktualisiere User, falls vorhanden
+        if (updatedExpense.getUser() != null && updatedExpense.getUser().getId() != null) {
+            Long userId = updatedExpense.getUser().getId();
+            User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                    "Benutzer nicht gefunden mit der ID: " + userId));
+            existingExpense.setUser(user);
+        }
 
-    
-    
-
-    // 3. Speichern und zurückgeben
-    return expenseRepository.save(existingExpense);
-}
+        // Speichern und zurückgeben
+        return expenseRepository.save(existingExpense);
+    }
     // Methode zum Abrufen einer Ausgabe nach ID
     public Expense getExpenseById(@NonNull Long expenseId) {
         return expenseRepository.findById(expenseId)

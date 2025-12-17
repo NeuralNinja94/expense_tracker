@@ -1,6 +1,7 @@
 package com.expensetracker.backend.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.lang.NonNull;
 import org.springframework.validation.annotation.Validated;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.expensetracker.backend.dto.UserDto;
 import com.expensetracker.backend.entities.User;
+import com.expensetracker.backend.mapper.UserMapper;
 import com.expensetracker.backend.services.UserService;
 
 @RestController
@@ -21,26 +24,32 @@ import com.expensetracker.backend.services.UserService;
 @RequestMapping("/api/users")
 public class UserController {
 
-    
-    //Abhängigkeit zu UserService
+    //Abhängigkeit zu UserService und UserMapper
     private final UserService userService;
-    public UserController(UserService userService) {
+    private final UserMapper userMapper;
+    
+    public UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
     //Abrufen aller Benutzer
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<UserDto> getAllUsers() {
+        return userService.getAllUsers().stream()
+                .map(userMapper::toDto)
+                .collect(Collectors.toList());
     }
     //Abrufen eines Benutzers nach ID
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable @NonNull Long id) {
-        return userService.getUserById(id);
+    public UserDto getUserById(@PathVariable @NonNull Long id) {
+        return userMapper.toDto(userService.getUserById(id));
     }
     //Erstellen eines neuen Benutzers
     @PostMapping
-    public User createUser(@RequestBody @Validated @NonNull User user) {
-        return userService.createUser(user);
+    @SuppressWarnings("null")
+    public UserDto createUser(@RequestBody @Validated @NonNull UserDto userDto) {
+        User user = userMapper.toEntity(userDto);
+        return userMapper.toDto(userService.createUser(user));
     }
     //Löschen eines Benutzers
     @DeleteMapping("/{id}")
@@ -49,8 +58,10 @@ public class UserController {
     }
     //Aktualisieren eines Benutzers
     @PatchMapping("/{id}")
-    public User updateUser(@PathVariable @NonNull Long id, @RequestBody @Validated @NonNull User user) {
-        return userService.updateUser(id, user);
+    @SuppressWarnings("null")
+    public UserDto updateUser(@PathVariable @NonNull Long id, @RequestBody @Validated @NonNull UserDto userDto) {
+        User user = userMapper.toEntity(userDto);
+        return userMapper.toDto(userService.updateUser(id, user));
     }
     
 

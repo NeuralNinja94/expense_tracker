@@ -1,9 +1,11 @@
 package com.expensetracker.backend.dto;
 
+import jakarta.validation.constraints.NotBlank;
 
 public class UserDto {
     
 private Long id;
+@NotBlank
 private String benutzername;
 
 public Long getId() {

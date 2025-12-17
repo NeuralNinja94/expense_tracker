@@ -5,28 +5,39 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.expensetracker.backend.entities.ExpenseSheet;
+import com.expensetracker.backend.entities.User;
 import com.expensetracker.backend.repositories.ExpenseSheetRepository;
+import com.expensetracker.backend.repositories.UserRepository;
 
 
 
 @Service
 public class ExpenseSheetService {
     private final ExpenseSheetRepository expenseSheetRepository;
+    private final UserRepository userRepository;
 
-    public ExpenseSheetService(ExpenseSheetRepository expenseSheetRepository) {
+    public ExpenseSheetService(ExpenseSheetRepository expenseSheetRepository, UserRepository userRepository) {
         this.expenseSheetRepository = expenseSheetRepository;
+        this.userRepository = userRepository;
     }
     // Methode zum Löschen eines Ausgabenblatts
     public void deleteExpenseSheet(@NonNull Long sheetId) {
         expenseSheetRepository.deleteById(sheetId);
     }
     //Methode zum Aktualisieren eines Ausgabenblatts
-    public ExpenseSheet updateExpenseSheet(@NonNull Long sheetId, @NonNull ExpenseSheet updatedExpenseSheet) {
+    public ExpenseSheet updateExpenseSheet(@NonNull Long sheetId, ExpenseSheet updatedExpenseSheet) {
         ExpenseSheet existingExpenseSheet = expenseSheetRepository.findById(sheetId)
                 .orElseThrow(() -> new IllegalArgumentException("Ausgabenblatt nicht gefunden mit der ID: " + sheetId));
 
         existingExpenseSheet.setBudget(updatedExpenseSheet.getBudget());
         existingExpenseSheet.setMonat(updatedExpenseSheet.getMonat());
+
+        Long userId = updatedExpenseSheet.getUser() != null ? updatedExpenseSheet.getUser().getId() : null;
+        if (userId != null) {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("Benutzer nicht gefunden mit der ID: " + userId));
+            existingExpenseSheet.setUser(user);
+        }
 
         return expenseSheetRepository.save(existingExpenseSheet);
     }
@@ -43,7 +54,14 @@ public class ExpenseSheetService {
     }
 
     //Neuerstellung eines Ausgabenblatts
-    public ExpenseSheet createExpenseSheet(@NonNull ExpenseSheet expenseSheet) {
+    public ExpenseSheet createExpenseSheet(ExpenseSheet expenseSheet) {
+        Long userId = expenseSheet.getUser() != null ? expenseSheet.getUser().getId() : null;
+        if (userId == null) {
+            throw new IllegalArgumentException("Benutzer-ID muss gesetzt sein");
+        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Benutzer nicht gefunden mit der ID: " + userId));
+        expenseSheet.setUser(user);
         return expenseSheetRepository.save(expenseSheet);
     }
 

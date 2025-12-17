@@ -1,13 +1,21 @@
 package com.expensetracker.backend.dto;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ExpenseDto {
 
 
     private Long id;
+    @NotBlank
     private String titel;
+    @NotNull
+    @DecimalMin("0.1")
     private Double betrag;
+    @NotBlank
     private String kategorie;
+    @NotNull
     private String datum;
 
     public Long getId() {

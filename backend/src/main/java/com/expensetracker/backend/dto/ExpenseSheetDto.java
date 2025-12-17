@@ -1,13 +1,19 @@
 package com.expensetracker.backend.dto;
 
-
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ExpenseSheetDto {
 
     
     private Long id;
+    @NotNull
+    @DecimalMin("0.1")
     private double budget;
+    @NotBlank
     private String monat;   
+    @NotNull
     private Long userId;
 
     public Long getId() {
