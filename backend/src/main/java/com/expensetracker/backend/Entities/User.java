@@ -1,10 +1,12 @@
 package com.expensetracker.backend.entities;
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -19,6 +21,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
+    @Email
+    @Column(unique = true)
+    private String email;
 
     
     @NotBlank
@@ -52,6 +58,15 @@ public class User {
 
     public LocalDate getErstellungsdatum() {
         return erstellungsdatum;
+    }
+    public void setErstellungsdatum(LocalDate erstellungsdatum) {
+        this.erstellungsdatum = erstellungsdatum;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
     }
 
 

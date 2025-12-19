@@ -1,5 +1,6 @@
 package com.expensetracker.backend.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public class UserDto {
@@ -7,6 +8,8 @@ public class UserDto {
 private Long id;
 @NotBlank
 private String benutzername;
+@Email
+private String email;
 
 public Long getId() {
     return id;
@@ -22,7 +25,11 @@ public String getBenutzername() {
 public void setBenutzername(String benutzername) {
     this.benutzername = benutzername;
     }
-
-    
+public String getEmail() {
+    return email;
+}
+public void setEmail(String email) {
+    this.email = email;
+} 
 
 }
